@@ -8,7 +8,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-app.get('/', (req, res) => res.send('Samrt Tickets Backend Running!'));
+app.get('/', (req, res) => res.send('Smart Tickets Backend Running!'));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
