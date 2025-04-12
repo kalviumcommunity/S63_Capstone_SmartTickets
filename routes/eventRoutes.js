@@ -39,4 +39,17 @@ router.post('/events', async (req, res) => {
       res.status(500).json({ message: 'Error creating event', error: err });
     }
   });
+  // Update an event
+router.put('/events/:id', async (req, res) => {
+    try {
+      const updatedEvent = await Event.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+      );
+      res.json(updatedEvent);
+    } catch (err) {
+      res.status(500).json({ message: 'Error updating event', error: err });
+    }
+  });
   

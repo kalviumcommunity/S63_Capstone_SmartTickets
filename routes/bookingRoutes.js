@@ -32,4 +32,17 @@ router.post('/bookings', async (req, res) => {
       res.status(500).json({ message: 'Error creating booking', error: err });
     }
   });
+  // Update a booking
+router.put('/bookings/:id', async (req, res) => {
+    try {
+      const updatedBooking = await Booking.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+      );
+      res.json(updatedBooking);
+    } catch (err) {
+      res.status(500).json({ message: 'Error updating booking', error: err });
+    }
+  });
   
