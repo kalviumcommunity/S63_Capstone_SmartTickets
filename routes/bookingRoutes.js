@@ -14,22 +14,3 @@ router.get('/user-bookings/:userId', async (req, res) => {
 });
 
 module.exports = router;
-// POST endpoint for creating a new booking
-router.post('/bookings', async (req, res) => {
-    const { userId, eventId, date, numberOfTickets } = req.body;
-  
-    try {
-      const newBooking = new Booking({
-        userId,
-        eventId,
-        date,
-        numberOfTickets
-      });
-  
-      await newBooking.save();
-      res.status(201).json({ message: 'Booking created successfully', newBooking });
-    } catch (err) {
-      res.status(500).json({ message: 'Error creating booking', error: err });
-    }
-  });
-  
