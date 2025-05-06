@@ -52,16 +52,16 @@ router.get('/event/:id', async (req, res) => {
 });
 
 // POST endpoint for creating a new event
-// router.post('/events', async (req, res) => {
-//   const { name, date, location, description } = req.body;
+router.post('/events', async (req, res) => {
+  const { name, date, location, description } = req.body;
 
-//    try {
-//      const newEvent = new Event({ name, date, location, description });
-//      await newEvent.save();
-//      res.status(201).json({ message: 'Event created successfully', newEvent });
-//    } catch (err) {
-//      res.status(500).json({ message: 'Error creating event', error: err });
-//    }
-//  });
+   try {
+     const newEvent = new Event({ name, date, location, description });
+     await newEvent.save();
+     res.status(201).json({ message: 'Event created successfully', newEvent });
+   } catch (err) {
+     res.status(500).json({ message: 'Error creating event', error: err });
+   }
+ });
 
  module.exports = router;
