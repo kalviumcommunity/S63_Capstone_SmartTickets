@@ -48,4 +48,5 @@ const bookingSchema = new mongoose.Schema({
     default: 'confirmed',
   },
 });
+
 module.exports = mongoose.model('Booking', bookingSchema);
