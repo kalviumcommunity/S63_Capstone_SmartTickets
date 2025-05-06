@@ -23,6 +23,8 @@ import RegisterPage from './pages/RegisterPage';
 import MoreInfo from './pages/MoreInfo';
 import CancelBooking from './pages/CancelBooking';
 import CancellationConfirmed from './pages/CancellationConfirmed';
+import Settings from './pages/Settings';
+import BookingInfo from './pages/BookingInfo';
 
 function App() {
   return (
@@ -51,6 +53,8 @@ function App() {
       <Route path="/more-info" element={<MoreInfo />} />
       <Route path="/cancel-booking" element={<CancelBooking />} />
       <Route path="/cancellation-confirmed" element={<CancellationConfirmed />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route path="/booking-info" element={<BookingInfo />} />
     </Routes>
   );
 }
