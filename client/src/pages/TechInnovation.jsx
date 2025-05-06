@@ -13,7 +13,7 @@ const CONTAINER_SHADOW = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba
 
 const initialEvents = [
   {
-    img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=facearea&w=400&h=200',
     name: 'AI Conference',
     date: '2024-09-10',
     time: '09:00',
@@ -21,7 +21,7 @@ const initialEvents = [
     tag: 'AI',
   },
   {
-    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?auto=format&fit=facearea&w=400&h=200',
     name: 'Blockchain Workshop',
     date: '2024-09-12',
     time: '14:00',
@@ -29,7 +29,7 @@ const initialEvents = [
     tag: 'Blockchain',
   },
   {
-    img: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=facearea&w=400&h=200',
     name: 'VR Expo',
     date: '2024-09-15',
     time: '10:00',
@@ -37,7 +37,7 @@ const initialEvents = [
     tag: 'VR',
   },
   {
-    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=facearea&w=400&h=200',
     name: 'IoT Summit',
     date: '2024-09-18',
     time: '11:00',
@@ -45,7 +45,7 @@ const initialEvents = [
     tag: 'IoT',
   },
   {
-    img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=facearea&w=400&h=200',
     name: 'Cybersecurity Forum',
     date: '2024-09-20',
     time: '13:00',
@@ -53,7 +53,7 @@ const initialEvents = [
     tag: 'Security',
   },
   {
-    img: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=facearea&w=400&h=200',
     name: 'Startup Pitch',
     date: '2024-09-22',
     time: '15:00',
@@ -61,7 +61,7 @@ const initialEvents = [
     tag: 'Startup',
   },
   {
-    img: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=facearea&w=400&h=200',
     name: 'Tech Meetup',
     date: '2024-09-24',
     time: '18:00',
@@ -69,7 +69,7 @@ const initialEvents = [
     tag: 'Meetup',
   },
   {
-    img: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=facearea&w=400&h=200',
     name: 'Hackathon',
     date: '2024-09-26',
     time: '09:00',
@@ -77,7 +77,7 @@ const initialEvents = [
     tag: 'Hackathon',
   },
   {
-    img: 'https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=facearea&w=400&h=200',
     name: 'Tech Expo',
     date: '2024-09-28',
     time: '10:00',
@@ -85,7 +85,7 @@ const initialEvents = [
     tag: 'Expo',
   },
   {
-    img: 'https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=facearea&w=400&h=200',
+    img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=facearea&w=400&h=200',
     name: 'Innovation Summit',
     date: '2024-09-30',
     time: '11:00',

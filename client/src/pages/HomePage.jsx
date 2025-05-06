@@ -23,7 +23,7 @@ const Navbar = ({ profileOpen, setProfileOpen }) => (
     <div style={{ display: 'flex', gap: '2.5rem', fontSize: '1.3rem', fontFamily: 'serif', alignItems: 'center', position: 'relative' }}>
       <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Home</Link>
       <Link to="/my-bookings" style={{ color: 'white', textDecoration: 'none' }}>My bookings</Link>
-      <Link to="#" style={{ color: 'white', textDecoration: 'none' }}>Events</Link>
+      <Link to="/settings" style={{ color: 'white', textDecoration: 'none' }}>Settings</Link>
       <Link to="/cancelled-tickets" style={{ color: 'white', textDecoration: 'none' }}>Cancelled tickets</Link>
       <Link to="/rate-us" style={{ color: 'white', textDecoration: 'none' }}>Rate Us</Link>
       <Link to="/login" style={{ 
