@@ -1,5 +1,5 @@
-const express = require('express');
-const Event = require('../models/Event'); // Make sure the path is correct
+import express from 'express';
+import Event from '../models/Event.js';
 const router = express.Router();
 
 // Sample data
@@ -64,4 +64,19 @@ router.post('/events', async (req, res) => {
    }
  });
 
- module.exports = router;
+// PUT /api/events/:id
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedEvent = await Event.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      { new: true }
+    );
+    if (!updatedEvent) return res.status(404).json({ message: 'Event not found' });
+    res.json(updatedEvent);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+export default router;
