@@ -1,0 +1,108 @@
+meta {
+  name: SmartTickets API
+  type: http
+  seq: 1
+}
+
+# Authentication Endpoints
+
+## Register User
+POST http://localhost:5050/api/auth/register
+headers {
+  Content-Type: application/json
+}
+body:json {
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+## Login User
+POST http://localhost:5050/api/auth/login
+headers {
+  Content-Type: application/json
+}
+body:json {
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+## Get Current User
+GET http://localhost:5050/api/auth/me
+headers {
+  Authorization: Bearer {{token}}
+}
+
+# Event Endpoints
+
+## Get All Events
+GET http://localhost:5050/api/events
+headers {
+  Authorization: Bearer {{token}}
+}
+
+## Create Event
+POST http://localhost:5050/api/events
+headers {
+  Authorization: Bearer {{token}},
+  Content-Type: application/json
+}
+body:json {
+  "title": "Test Event",
+  "description": "This is a test event",
+  "date": "2024-03-20T10:00:00Z",
+  "venue": "Test Venue",
+  "price": 50,
+  "totalSeats": 100
+}
+
+## Get Event by ID
+GET http://localhost:5050/api/events/{{eventId}}
+headers {
+  Authorization: Bearer {{token}}
+}
+
+# Booking Endpoints
+
+## Get User Bookings
+GET http://localhost:5050/api/bookings
+headers {
+  Authorization: Bearer {{token}}
+}
+
+## Create Booking
+POST http://localhost:5050/api/bookings
+headers {
+  Authorization: Bearer {{token}},
+  Content-Type: application/json
+}
+body:json {
+  "eventId": "{{eventId}}",
+  "seats": 2
+}
+
+## Cancel Booking
+DELETE http://localhost:5050/api/bookings/{{bookingId}}
+headers {
+  Authorization: Bearer {{token}}
+}
+
+# File Upload Endpoints
+
+## Upload Single File
+POST http://localhost:5050/api/upload
+headers {
+  Authorization: Bearer {{token}}
+}
+body:multipart-form {
+  file: (binary)
+}
+
+## Upload Multiple Files
+POST http://localhost:5050/api/upload/multiple
+headers {
+  Authorization: Bearer {{token}}
+}
+body:multipart-form {
+  files: (binary)
+} 
