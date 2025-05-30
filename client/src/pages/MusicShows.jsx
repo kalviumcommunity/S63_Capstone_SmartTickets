@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaMusic, FaCalendarAlt, FaClock, FaSort } from 'react-icons/fa';
+import { FaCalendarAlt, FaClock, FaSort } from 'react-icons/fa';
+import { CategoryIcons, IconWrapper } from '../components/Icons';
 import Navbar from '../components/Navbar';
 
 const ACCENT = '#2563eb';
@@ -207,14 +208,13 @@ const MusicShows = () => {
             transform: 'translateX(-50%)',
             padding: '0 32px',
           }}>
-            <FaMusic style={{ 
-              color: ACCENT, 
-              marginRight: 16, 
-              verticalAlign: 'middle',
-              fontSize: '2.5rem',
-              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
-            }} />
-            Upcoming Music Shows
+            <IconWrapper 
+              icon={CategoryIcons.music} 
+              size={40} 
+              color={ACCENT}
+              className="mr-4"
+            />
+            Music Shows
           </h1>
           <div style={{
             width: '100px',

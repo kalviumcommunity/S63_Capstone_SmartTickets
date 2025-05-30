@@ -1,127 +1,130 @@
 import React, { useState } from 'react';
-import './HomePage.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
-const Navbar = () => (
-  <div style={{ 
-    width: '100%', 
-    display: 'flex', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
-    padding: '32px 48px 0 48px', 
-    boxSizing: 'border-box', 
-    position: 'absolute', 
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 100, 
-    background: 'rgba(0, 0, 0, 0.3)',
-    backdropFilter: 'blur(4px)'
-  }}>
-    <Link to="/" style={{ fontFamily: 'serif', fontSize: '2.5rem', fontWeight: 500, color: 'white', letterSpacing: 2, textShadow: '0 2px 8px rgba(0,0,0,0.5)', textDecoration: 'none' }}>Smart Tickets</Link>
-    <div style={{ display: 'flex', gap: '2.5rem', fontSize: '1.3rem', fontFamily: 'serif', alignItems: 'center' }}>
-      <Link to="/" style={{ color: 'white', textDecoration: 'none', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Home</Link>
-      <Link to="/my-bookings" style={{ color: 'white', textDecoration: 'none', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>My bookings</Link>
-      <Link to="#" style={{ color: 'white', textDecoration: 'none', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Events</Link>
-      <Link to="/cancelled-tickets" style={{ color: 'white', textDecoration: 'none', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>Cancelled tickets</Link>
-    </div>
-  </div>
-);
+const ACCENT = '#2563eb';
+const GRADIENT = 'linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%)';
+const CARD_SHADOW = '0 4px 32px rgba(37,99,235,0.08)';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    alert(`Email: ${email}\nPhone: ${phone}\nPassword: ${password}`);
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        alert('Login successful!');
+        navigate('/dashboard');
+      } else {
+        alert(data.message || 'Login failed. Please check your credentials.');
+      }
+    } catch (err) {
+      alert('Login failed. Please try again.');
+      console.error(err);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0F1C]">
-      {/* Navbar */}
-      <Navbar />
-      
-      {/* Hero Section with background */}
-      <div className="hero-section">
-        <div 
-          className="hero-background"
-          style={{
-            backgroundImage: "url('/bg1.jpg')",
-            backgroundPosition: 'center 30%'
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-cyan-900/30 via-cyan-800/20 to-black/50"></div>
-        </div>
-        
-        {/* Login Form Content */}
+    <div style={{ minHeight: '100vh', background: GRADIENT, position: 'relative' }}>
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: 80,
+        position: 'relative',
+      }}>
         <div style={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          background: 'rgba(255,255,255,0.97)',
+          borderRadius: 24,
+          boxShadow: CARD_SHADOW,
+          padding: 48,
+          maxWidth: 420,
+          width: '100%',
           position: 'relative',
-          zIndex: 10
+          overflow: 'hidden',
         }}>
-          <div style={{
-            background: 'rgba(0,0,0,0.85)',
-            padding: 40,
-            borderRadius: 12,
-            minWidth: 350,
-            boxShadow: '0 4px 32px rgba(0,0,0,0.4)'
-          }}>
-            <form
-              className="login-form"
-              style={{
-                width: '100%',
-                background: 'none',
-                padding: 0,
-                borderRadius: 0
-              }}
-              onSubmit={handleSubmit}
-            >
-              <div>
-                <label style={{ color: '#fff', fontWeight: 500 }}>Email</label>
-                <input
-                  type="email"
-                  className="search-input"
-                  style={{ marginBottom: 16, width: '100%' }}
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label style={{ color: '#fff', fontWeight: 500 }}>Phone Number</label>
-                <input
-                  type="tel"
-                  className="search-input"
-                  style={{ marginBottom: 16, width: '100%' }}
-                  value={phone}
-                  onChange={e => setPhone(e.target.value)}
-                  required
-                  pattern="[0-9]{10,15}"
-                  placeholder="Enter your phone number"
-                />
-              </div>
-              <div>
-                <label style={{ color: '#fff', fontWeight: 500 }}>Password</label>
-                <input
-                  type="password"
-                  className="search-input"
-                  style={{ marginBottom: 16, width: '100%' }}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <div style={{ marginBottom: 16 }}>
-                <Link to="/register" style={{ color: '#60a5fa', fontSize: 14, textDecoration: 'underline', cursor: 'pointer' }}>Create new account? Register</Link>
-              </div>
-              <button type="submit" className="sign-in-button" style={{ marginTop: 8, width: '100%' }}>Sign in</button>
-            </form>
+          <h2 style={{
+            textAlign: 'center',
+            fontSize: '2.2rem',
+            fontWeight: 700,
+            color: ACCENT,
+            marginBottom: 24,
+            fontFamily: 'serif',
+            letterSpacing: 1,
+          }}>Sign in to your account</h2>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <input
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              type="email"
+              placeholder="Email address"
+              style={{ padding: '14px', borderRadius: 10, border: `1.5px solid ${ACCENT}`, fontSize: 16, marginBottom: 2 }}
+            />
+            <input
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              required
+              type="tel"
+              placeholder="Phone number"
+              pattern="[0-9]{10,15}"
+              style={{ padding: '14px', borderRadius: 10, border: `1.5px solid ${ACCENT}`, fontSize: 16, marginBottom: 2 }}
+            />
+            <input
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              type="password"
+              placeholder="Password"
+              style={{ padding: '14px', borderRadius: 10, border: `1.5px solid ${ACCENT}`, fontSize: 16, marginBottom: 2 }}
+            />
+            <button type="submit" style={{
+              background: ACCENT,
+              color: 'white',
+              border: 'none',
+              borderRadius: 10,
+              padding: '16px 0',
+              fontWeight: 700,
+              fontSize: 18,
+              marginTop: 8,
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(37,99,235,0.08)',
+              transition: 'background 0.2s',
+              letterSpacing: 1,
+            }}>Sign in</button>
+          </form>
+          <div style={{ textAlign: 'center', marginTop: 18 }}>
+            <span style={{ color: '#64748b', fontSize: 15 }}>Create new account?{' '}
+              <Link to="/register" style={{ color: ACCENT, textDecoration: 'underline', fontWeight: 500 }}>Register</Link>
+            </span>
           </div>
         </div>
       </div>

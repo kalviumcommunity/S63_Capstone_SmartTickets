@@ -1,0 +1,84 @@
+meta {
+  name: SmartTickets API
+  type: http
+}
+
+vars {
+  base_url: http://localhost:5050
+  token: {{$process.env.token}}
+  eventId: {{$process.env.eventId}}
+  bookingId: {{$process.env.bookingId}}
+}
+
+# --- Authentication Endpoints ---
+# Register a new user
+post: {{base_url}}/api/auth/register {
+  body:json {
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "password": "password123"
+  }
+  auth:none
+}
+
+# Login and get a JWT token
+post: {{base_url}}/api/auth/login {
+  body:json {
+    "email": "jane@example.com",
+    "password": "password123"
+  }
+  auth:none
+}
+
+# Get current user profile (requires token)
+get: {{base_url}}/api/auth/me {
+  auth:bearer {{token}}
+}
+
+# --- Event Endpoints ---
+# Get all events
+get: {{base_url}}/api/events {}
+
+# Get a specific event by ID
+get: {{base_url}}/api/event/:id {
+  vars { id: {{eventId}} }
+}
+
+# Create a new event (requires token)
+post: {{base_url}}/api/events {
+  body:json {
+    "name": "Tech Conference",
+    "date": "2024-12-31",
+    "location": "Convention Center",
+    "description": "A conference about the latest in tech."
+  }
+  auth:bearer {{token}}
+}
+
+# --- Booking Endpoints ---
+# Get all bookings for the current user
+get: {{base_url}}/api/bookings {
+  auth:bearer {{token}}
+}
+
+# Book tickets for an event
+post: {{base_url}}/api/bookings {
+  body:json {
+    "eventId": "{{eventId}}",
+    "seats": 2
+  }
+  auth:bearer {{token}}
+}
+
+# Cancel a booking by ID
+delete: {{base_url}}/api/bookings/:id {
+  auth:bearer {{token}}
+  vars { id: {{bookingId}} }
+}
+
+# --- File Upload Endpoint ---
+# Upload a single image file (requires token)
+post: {{base_url}}/api/upload/single {
+  body:form-data { "image": @file }
+  auth:bearer {{token}}
+} 
