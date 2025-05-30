@@ -1,52 +1,42 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const bookingSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  event: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Event',
-    required: true,
-  },
-  seats: [
-    {
-      seatNumber: String,
-      section: String, // Optional: for more complex layouts
+const bookingSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    event: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Event',
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: [true, 'Please add quantity'],
+      min: 1,
+    },
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'confirmed', 'cancelled'],
+      default: 'pending',
+    },
+    paymentStatus: {
+      type: String,
+      enum: ['pending', 'completed', 'failed'],
+      default: 'pending',
     }
-  ],
-  numberOfTickets: {
-    type: Number,
-    required: true,
-    min: 1,
   },
-  totalAmount: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-  paymentStatus: {
-    type: String,
-    enum: ['pending', 'paid', 'failed'],
-    default: 'pending',
-  },
-  stripePaymentId: {
-    type: String,
-  },
-  qrCode: {
-    type: String, // Store image URL or Base64 string
-  },
-  bookingDate: {
-    type: Date,
-    default: Date.now,
-  },
-  status: {
-    type: String,
-    enum: ['confirmed', 'cancelled'],
-    default: 'confirmed',
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.model('Booking', bookingSchema);
+const Booking = mongoose.model('Booking', bookingSchema);
+
+export default Booking;
