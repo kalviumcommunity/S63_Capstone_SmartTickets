@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 const ACCENT = '#2563eb';
 const GRADIENT = 'linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%)';
@@ -8,7 +9,6 @@ const CARD_SHADOW = '0 4px 32px rgba(37,99,235,0.08)';
 const LoginPage = () => {
   const [form, setForm] = useState({
     email: '',
-    phone: '',
     password: '',
   });
   const navigate = useNavigate();
@@ -17,10 +17,35 @@ const LoginPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    alert(`Email: ${form.email}\nPhone: ${form.phone}\nPassword: ${form.password}`);
-    // Add your login logic here
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        alert('Login successful!');
+        navigate('/dashboard');
+      } else {
+        alert(data.message || 'Login failed. Please check your credentials.');
+      }
+    } catch (err) {
+      alert('Login failed. Please try again.');
+      console.error(err);
+    }
   };
 
   return (
