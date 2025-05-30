@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { API_URL } from '../config/api';
 
 const ACCENT = '#2563eb';
 const GRADIENT = 'linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%)';
@@ -8,7 +9,7 @@ const CARD_SHADOW = '0 4px 32px rgba(37,99,235,0.08)';
 
 const RegisterPage = () => {
   const [form, setForm] = useState({
-    name: '',
+    username: '',
     email: '',
     phone: '',
     password: '',
@@ -20,16 +21,40 @@ const RegisterPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-    // Registration logic here
-    alert(`Registration successful! Welcome, ${form.name}!`);
-    localStorage.setItem('isLoggedIn', 'true');
-    navigate('/');
+
+    try {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: form.username,
+          email: form.email,
+          phoneNumber: form.phone,
+          password: form.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Registration successful! Please check your email to verify your account.');
+        navigate('/login');
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please try again.');
+    }
   };
 
   return (
@@ -62,13 +87,14 @@ const RegisterPage = () => {
             fontFamily: 'serif',
             letterSpacing: 1,
           }}>Create Account</h2>
+
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <input
-              name="name"
-              value={form.name}
+              name="username"
+              value={form.username}
               onChange={handleChange}
               required
-              placeholder="Full Name"
+              placeholder="Username"
               style={{ padding: '14px', borderRadius: 10, border: `1.5px solid ${ACCENT}`, fontSize: 16, marginBottom: 2 }}
             />
             <input
@@ -123,6 +149,7 @@ const RegisterPage = () => {
               letterSpacing: 1,
             }}>Register</button>
           </form>
+
           <div style={{ textAlign: 'center', marginTop: 18 }}>
             <span style={{ color: '#64748b', fontSize: 15 }}>Already have an account?{' '}
               <Link to="/login" style={{ color: ACCENT, textDecoration: 'underline', fontWeight: 500 }}>Sign In</Link>
@@ -134,4 +161,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage; 
+export default RegisterPage;

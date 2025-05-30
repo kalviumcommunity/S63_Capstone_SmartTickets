@@ -29,8 +29,13 @@ const MoreInfo = () => {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: GRADIENT, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, position: 'relative' }}>
+    <div style={{ minHeight: '100vh', background: GRADIENT, display: 'flex', flexDirection: 'column' }}>
+      {/* Navbar at the top */}
+      <div style={{ flexShrink: 0 }}>
       <Navbar />
+      </div>
+      {/* Centered content */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{
         background: 'rgba(255,255,255,0.97)',
         borderRadius: 24,
@@ -40,7 +45,6 @@ const MoreInfo = () => {
         width: '100%',
         position: 'relative',
         overflow: 'hidden',
-        marginTop: 80
       }}>
         {/* Event Details Card */}
         <img src={event.img} alt={event.name} style={{ width: '100%', height: 220, objectFit: 'cover', borderRadius: 16, marginBottom: 18, boxShadow: '0 2px 8px #2563eb22' }} />
@@ -101,6 +105,7 @@ const MoreInfo = () => {
           >
             Book Now
           </button>
+          </div>
         </div>
       </div>
     </div>

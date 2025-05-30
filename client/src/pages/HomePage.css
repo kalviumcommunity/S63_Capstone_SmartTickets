@@ -231,6 +231,48 @@ nav button.sign-in {
   color: #f3f3f3;
 }
 
+.event-card.enhanced-card {
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s cubic-bezier(0.4,0,0.2,1), filter 0.22s;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  filter: brightness(1) saturate(1);
+}
+.event-card.enhanced-card:hover {
+  transform: translateY(-12px) scale(1.06);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+  filter: brightness(1.08) saturate(1.15);
+}
+
+.event-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: linear-gradient(90deg, #f59e42 0%, #f43f5e 100%);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  letter-spacing: 0.5px;
+  z-index: 2;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.10);
+  animation: fadeInDown 0.5s;
+}
+
+.event-count {
+  margin-top: 10px;
+  font-size: 1.08rem;
+  color: #fff;
+  background: rgba(0,0,0,0.18);
+  padding: 4px 14px;
+  border-radius: 12px;
+  display: inline-block;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  animation: fadeInUp 0.5s;
+}
+
 /* Footer Styles */
 .footer {
   background: white;
@@ -313,4 +355,169 @@ nav button.sign-in {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #666;
+}
+
+/* FAQ/Help Widget Styles */
+.faq-fab {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f43f5e 0%, #f59e42 100%);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 900;
+  border: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  cursor: pointer;
+  z-index: 9999;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.faq-fab:hover {
+  background: linear-gradient(135deg, #f59e42 0%, #f43f5e 100%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  transform: scale(1.08);
+}
+.faq-popup {
+  position: fixed;
+  bottom: 100px;
+  right: 32px;
+  width: 320px;
+  background: #fff;
+  color: #1a202c;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  z-index: 10000;
+  animation: fadeInUp 0.4s;
+}
+.faq-popup h4 {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  color: #f43f5e;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.faq-popup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.faq-popup li {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+.faq-popup a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Newsletter Highlight */
+.footer form {
+  box-shadow: 0 2px 12px #f59e4240;
+  border: 2px solid #f59e42;
+  border-radius: 12px;
+  background: #fff8f1;
+  padding: 0.5rem 0.7rem;
+}
+.footer input[type="email"] {
+  border: 1px solid #f59e42;
+  background: #fff;
+}
+.footer button[type="submit"] {
+  background: linear-gradient(90deg, #f59e42 0%, #f43f5e 100%);
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #f59e4240;
+  transition: background 0.2s;
+}
+.footer button[type="submit"]:hover {
+  background: linear-gradient(90deg, #f43f5e 0%, #f59e42 100%);
+}
+
+.trust-badges-section {
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+}
+.trust-badge {
+  background: #fff8f1;
+  color: #f43f5e;
+  font-weight: 700;
+  font-size: 1.08rem;
+  border-radius: 16px;
+  padding: 0.7rem 1.5rem;
+  box-shadow: 0 2px 8px #f59e4240;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  letter-spacing: 0.2px;
+}
+.achievements-section {
+  margin-bottom: 2rem;
+}
+.user-badge {
+  background: linear-gradient(90deg, #f59e42 0%, #f43f5e 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.08rem;
+  border-radius: 16px;
+  padding: 0.7rem 1.5rem;
+  box-shadow: 0 2px 8px #f59e4240;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  letter-spacing: 0.2px;
+  margin-bottom: 0.5rem;
+}
+.countdown-section {
+  margin-bottom: 2rem;
+  animation: fadeInDown 0.7s;
+}
+.blog-section {
+  margin-bottom: 2.5rem;
+}
+.blog-card {
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+.blog-card:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 8px 32px #f59e42;
+}
+
+.parallax-hero {
+  position: relative;
+  overflow: hidden;
+}
+.parallax-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  z-index: 1;
+  will-change: background-position;
+}
+.glass-overlay {
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #f59e4240;
+}
+.hero-content, .event-content, .search-wrapper {
+  position: relative;
+  z-index: 2;
+}
+.event-card.glass-overlay {
+  background: rgba(255,255,255,0.18) !important;
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #f59e4240;
 }

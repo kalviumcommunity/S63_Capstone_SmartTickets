@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaTheaterMasks, FaCalendarAlt, FaClock, FaSort } from 'react-icons/fa';
+import { FaCalendarAlt, FaClock, FaSort } from 'react-icons/fa';
+import { CategoryIcons, IconWrapper } from '../components/Icons';
 import Navbar from '../components/Navbar';
 
 const ACCENT = '#a78bfa';
@@ -60,7 +61,12 @@ const TheatreShows = () => {
       <Navbar />
       <div style={{ paddingTop: 120, maxWidth: 1400, margin: '0 auto' }}>
         <h1 style={{ textAlign: 'center', fontSize: '3rem', fontFamily: 'serif', marginBottom: 16, color: '#fff', letterSpacing: 1, textShadow: '0 2px 8px #0008' }}>
-          <FaTheaterMasks style={{ color: ACCENT, marginRight: 12, verticalAlign: 'middle' }} />
+          <IconWrapper 
+            icon={CategoryIcons.theatre} 
+            size={40} 
+            color={ACCENT}
+            className="mr-4"
+          />
           Upcoming Theatre Shows
         </h1>
         {/* Filters */}

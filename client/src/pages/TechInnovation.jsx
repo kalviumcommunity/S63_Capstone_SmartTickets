@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaLaptop, FaCalendarAlt, FaClock, FaSort } from 'react-icons/fa';
+import { FaCalendarAlt, FaClock, FaSort } from 'react-icons/fa';
+import { CategoryIcons, IconWrapper } from '../components/Icons';
 import Navbar from '../components/Navbar';
 
 const ACCENT = '#3b82f6';
@@ -175,13 +176,12 @@ const TechInnovation = () => {
             transform: 'translateX(-50%)',
             padding: '0 32px',
           }}>
-            <FaLaptop style={{ 
-              color: ACCENT, 
-              marginRight: 16, 
-              verticalAlign: 'middle',
-              fontSize: '2.5rem',
-              filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1))',
-            }} />
+            <IconWrapper 
+              icon={CategoryIcons.tech} 
+              size={40} 
+              color={ACCENT}
+              className="mr-4"
+            />
             Tech & Innovation Events
           </h1>
           <div style={{

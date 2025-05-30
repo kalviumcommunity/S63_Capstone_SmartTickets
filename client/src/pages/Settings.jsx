@@ -1,8 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+import FileUpload from '../components/FileUpload';
+import axios from 'axios';
 import { FaUserCog, FaEnvelope, FaMobileAlt, FaLock, FaShieldAlt, FaPalette, FaLanguage } from 'react-icons/fa';
 
+const USER_EMAIL = 'johndoe@email.com';
+
 const Settings = () => {
+  const [profileImage, setProfileImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  // Fetch user profile on mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`/api/users/${USER_EMAIL}`);
+        setProfileImage(res.data.profileImage);
+      } catch (err) {
+        setProfileImage(null);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  // After upload, update the backend and UI
+  const handleProfileImageUpload = async (response) => {
+    const imagePath = response.file.path;
+    setProfileImage(imagePath);
+    setPreviewImage(null); // Clear preview after upload
+    try {
+      await axios.post('/api/users/update-profile-image', {
+        email: USER_EMAIL,
+        profileImage: imagePath,
+      });
+    } catch (err) {
+      // Optionally handle error
+    }
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -14,12 +49,46 @@ const Settings = () => {
       <div style={{ maxWidth: 600, margin: '0 auto', background: 'white', borderRadius: 24, boxShadow: '0 8px 32px rgba(60,60,120,0.10)', padding: 36, marginTop: 40 }}>
         {/* Profile Summary */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 32 }}>
-          <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#e0e7ff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: '#6366f1', fontWeight: 700 }}>
-            <FaUserCog />
+          <div style={{ 
+            width: 64, 
+            height: 64, 
+            borderRadius: '50%', 
+            background: profileImage || previewImage ? 'none' : '#e0e7ff', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            fontSize: 32, 
+            color: '#6366f1', 
+            fontWeight: 700,
+            overflow: 'hidden',
+            border: '2px solid #e0e7ff',
+          }}>
+            {previewImage ? (
+              <img 
+                src={previewImage} 
+                alt="Preview" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              />
+            ) : profileImage ? (
+              <img 
+                src={profileImage} 
+                alt="Profile" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              />
+            ) : (
+              <FaUserCog />
+            )}
           </div>
           <div>
             <div style={{ fontWeight: 700, fontSize: 22, color: '#1e293b' }}>John Doe</div>
-            <div style={{ color: '#64748b', fontSize: 16 }}>johndoe@email.com</div>
+            <div style={{ color: '#64748b', fontSize: 16 }}>{USER_EMAIL}</div>
+            <div style={{ marginTop: 8 }}>
+              <FileUpload 
+                onUploadSuccess={handleProfileImageUpload}
+                multiple={false}
+                onPreviewImage={setPreviewImage}
+              />
+            </div>
           </div>
         </div>
         <h1 style={{ fontSize: 32, fontWeight: 800, color: '#3730a3', marginBottom: 24, letterSpacing: 1 }}>Settings</h1>
