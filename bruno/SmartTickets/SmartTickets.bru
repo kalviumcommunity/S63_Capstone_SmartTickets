@@ -1,108 +1,84 @@
 meta {
   name: SmartTickets API
   type: http
-  seq: 1
 }
 
-# Authentication Endpoints
-
-## Register User
-POST http://localhost:5050/api/auth/register
-headers {
-  Content-Type: application/json
-}
-body:json {
-  "name": "Test User",
-  "email": "test@example.com",
-  "password": "password123"
+vars {
+  base_url: http://localhost:5050
+  token: {{$process.env.token}}
+  eventId: {{$process.env.eventId}}
+  bookingId: {{$process.env.bookingId}}
 }
 
-## Login User
-POST http://localhost:5050/api/auth/login
-headers {
-  Content-Type: application/json
-}
-body:json {
-  "email": "test@example.com",
-  "password": "password123"
-}
-
-## Get Current User
-GET http://localhost:5050/api/auth/me
-headers {
-  Authorization: Bearer {{token}}
+# --- Authentication Endpoints ---
+# Register a new user
+post: {{base_url}}/api/auth/register {
+  body:json {
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "password": "password123"
+  }
+  auth:none
 }
 
-# Event Endpoints
-
-## Get All Events
-GET http://localhost:5050/api/events
-headers {
-  Authorization: Bearer {{token}}
+# Login and get a JWT token
+post: {{base_url}}/api/auth/login {
+  body:json {
+    "email": "jane@example.com",
+    "password": "password123"
+  }
+  auth:none
 }
 
-## Create Event
-POST http://localhost:5050/api/events
-headers {
-  Authorization: Bearer {{token}},
-  Content-Type: application/json
-}
-body:json {
-  "title": "Test Event",
-  "description": "This is a test event",
-  "date": "2024-03-20T10:00:00Z",
-  "venue": "Test Venue",
-  "price": 50,
-  "totalSeats": 100
+# Get current user profile (requires token)
+get: {{base_url}}/api/auth/me {
+  auth:bearer {{token}}
 }
 
-## Get Event by ID
-GET http://localhost:5050/api/events/{{eventId}}
-headers {
-  Authorization: Bearer {{token}}
+# --- Event Endpoints ---
+# Get all events
+get: {{base_url}}/api/events {}
+
+# Get a specific event by ID
+get: {{base_url}}/api/event/:id {
+  vars { id: {{eventId}} }
 }
 
-# Booking Endpoints
-
-## Get User Bookings
-GET http://localhost:5050/api/bookings
-headers {
-  Authorization: Bearer {{token}}
+# Create a new event (requires token)
+post: {{base_url}}/api/events {
+  body:json {
+    "name": "Tech Conference",
+    "date": "2024-12-31",
+    "location": "Convention Center",
+    "description": "A conference about the latest in tech."
+  }
+  auth:bearer {{token}}
 }
 
-## Create Booking
-POST http://localhost:5050/api/bookings
-headers {
-  Authorization: Bearer {{token}},
-  Content-Type: application/json
-}
-body:json {
-  "eventId": "{{eventId}}",
-  "seats": 2
+# --- Booking Endpoints ---
+# Get all bookings for the current user
+get: {{base_url}}/api/bookings {
+  auth:bearer {{token}}
 }
 
-## Cancel Booking
-DELETE http://localhost:5050/api/bookings/{{bookingId}}
-headers {
-  Authorization: Bearer {{token}}
+# Book tickets for an event
+post: {{base_url}}/api/bookings {
+  body:json {
+    "eventId": "{{eventId}}",
+    "seats": 2
+  }
+  auth:bearer {{token}}
 }
 
-# File Upload Endpoints
-
-## Upload Single File
-POST http://localhost:5050/api/upload
-headers {
-  Authorization: Bearer {{token}}
-}
-body:multipart-form {
-  file: (binary)
+# Cancel a booking by ID
+delete: {{base_url}}/api/bookings/:id {
+  auth:bearer {{token}}
+  vars { id: {{bookingId}} }
 }
 
-## Upload Multiple Files
-POST http://localhost:5050/api/upload/multiple
-headers {
-  Authorization: Bearer {{token}}
-}
-body:multipart-form {
-  files: (binary)
+# --- File Upload Endpoint ---
+# Upload a single image file (requires token)
+post: {{base_url}}/api/upload/single {
+  body:form-data { "image": @file }
+  auth:bearer {{token}}
 } 

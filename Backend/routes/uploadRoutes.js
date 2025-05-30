@@ -1,70 +1,124 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
+import { uploadSingleFile, uploadMultipleFiles } from '../controllers/uploadController.js';
+import upload from '../middleware/uploadMiddleware.js';
+import { protect } from '../middleware/authMiddleware.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// Configure multer storage
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, '../uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Configure multer storage with better filename handling
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
+    const uniquePrefix = uuidv4();
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, `${uniquePrefix}-${Date.now()}${ext}`);
   }
 });
 
-// File filter to accept only images
+// Enhanced file filter with more image types
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
+  const allowedTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'image/svg+xml'
+  ];
+  
+  if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Not an image! Please upload only images.'), false);
+    cb(new Error('Invalid file type. Only images are allowed (JPEG, PNG, GIF, WEBP, SVG)'), false);
   }
 };
 
-const upload = multer({
+// Configure multer with better error handling
+const uploadMulter = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+    files: 5 // For multiple uploads
   }
 });
 
-// Upload single file
-router.post('/single', upload.single('image'), (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'No file uploaded' });
+// Middleware to handle multer errors
+const handleUploadErrors = (err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    // A Multer error occurred when uploading
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({ 
+        success: false,
+        message: 'File too large. Maximum size is 10MB'
+      });
     }
-    res.status(200).json({
-      message: 'File uploaded successfully',
-      file: {
-        filename: req.file.filename,
-        path: req.file.path
-      }
+    if (err.code === 'LIMIT_FILE_COUNT') {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Too many files. Maximum 5 files allowed'
+      });
+    }
+    return res.status(400).json({ 
+      success: false,
+      message: err.message 
+    });
+  } else if (err) {
+    // An unknown error occurred
+    return res.status(500).json({ 
+      success: false,
+      message: err.message || 'File upload failed'
+    });
+  }
+  next();
+};
+
+// Single file upload route
+router.post('/single', protect, uploadMulter.single('image'), uploadSingleFile);
+
+// Multiple files upload route
+router.post('/multiple', protect, uploadMulter.array('images', 5), uploadMultipleFiles);
+
+// Delete file endpoint
+router.delete('/:filename', (req, res) => {
+  try {
+    const filename = req.params.filename;
+    const filePath = path.join(uploadDir, filename);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ 
+        success: false,
+        message: 'File not found' 
+      });
+    }
+
+    fs.unlinkSync(filePath);
+    res.status(200).json({ 
+      success: true,
+      message: 'File deleted successfully' 
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Upload multiple files
-router.post('/multiple', upload.array('images', 5), (req, res) => {
-  try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: 'No files uploaded' });
-    }
-    res.status(200).json({
-      message: 'Files uploaded successfully',
-      files: req.files.map(file => ({
-        filename: file.filename,
-        path: file.path
-      }))
+    res.status(500).json({ 
+      success: false,
+      message: 'Error deleting file',
+      error: error.message 
     });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
 });
 
-export default router; 
+export default router;

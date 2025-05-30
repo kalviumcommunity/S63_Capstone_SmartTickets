@@ -2,12 +2,12 @@ import express from 'express';
 import Booking from '../models/Booking.js';
 import Event from '../models/Event.js';
 import User from '../models/User.js';
-import auth from '../middleware/auth.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
 // Get all bookings for a user
-router.get('/', auth, async (req, res) => {
+router.get('/', protect, async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user.id })
       .populate('event')
@@ -19,7 +19,7 @@ router.get('/', auth, async (req, res) => {
 });
 
 // Create a new booking
-router.post('/', auth, async (req, res) => {
+router.post('/', protect, async (req, res) => {
   try {
     const { eventId, seats } = req.body;
 
@@ -46,7 +46,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // Cancel a booking
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', protect, async (req, res) => {
   try {
     const booking = await Booking.findOne({
       _id: req.params.id,

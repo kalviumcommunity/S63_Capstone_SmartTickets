@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import { API_URL } from '../config/api';
 
 const ACCENT = '#2563eb';
 const GRADIENT = 'linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%)';
@@ -28,12 +29,11 @@ const RegisterPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const response = await fetch(`${API_URL}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'include', // ✅ important for sending/receiving cookies/tokens
         body: JSON.stringify({
           username: form.username,
           email: form.email,
@@ -45,14 +45,15 @@ const RegisterPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Registration successful! Please log in.');
+        alert('Registration successful! Please check your email to verify your account.');
         navigate('/login');
       } else {
-        alert(data.message || 'Registration failed.');
+        const errorData = await response.json();
+        alert(errorData.message || 'Registration failed. Please try again.');
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Registration error:', error);
       alert('Registration failed. Please try again.');
-      console.error(err);
     }
   };
 
