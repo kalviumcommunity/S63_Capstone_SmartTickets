@@ -4,12 +4,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import connectDB from './config/db';
+import connectDB from './config/db.js';
 
 import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
-import uploadRoutes from './routes/uploadRoutes.js';
 
 dotenv.config();
 
@@ -23,13 +22,11 @@ connectDB();
 // Basic middleware
 app.use(cors());  // Allow all origins for testing
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/bookings', bookingRoutes);
-app.use('/api/upload', uploadRoutes);
 
 // Start server
 const PORT = process.env.PORT || 5050;
