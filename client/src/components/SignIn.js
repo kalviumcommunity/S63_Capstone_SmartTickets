@@ -8,6 +8,7 @@ const SignIn = () => {
     password: ''
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -20,18 +21,26 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signin', formData);
+      const response = await axios.post('http://localhost:5050/api/auth/login', formData);
 
-      // Store token in localStorage
+      // Store token and user data in localStorage
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      localStorage.setItem('user', JSON.stringify({
+        _id: response.data._id,
+        name: response.data.name,
+        email: response.data.email,
+        role: response.data.role
+      }));
 
       // Redirect to home page
       navigate('/');
     } catch (error) {
       setError(error.response?.data?.message || 'Error signing in');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,6 +51,12 @@ const SignIn = () => {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Or{' '}
+            <a href="/register" className="font-medium text-indigo-600 hover:text-indigo-500">
+              create a new account
+            </a>
+          </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
@@ -81,9 +96,12 @@ const SignIn = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={loading}
+              className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+                loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             >
-              Sign in
+              {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
         </form>
