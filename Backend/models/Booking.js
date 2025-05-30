@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema({
   event: {
@@ -11,18 +11,27 @@ const bookingSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  seats: {
+  numberOfTickets: {
     type: Number,
-    required: true,
-    min: 1
+    required: [true, 'Please provide number of tickets'],
+    min: [1, 'Must book at least 1 ticket']
+  },
+  totalAmount: {
+    type: Number,
+    required: true
   },
   status: {
     type: String,
-    enum: ['confirmed', 'cancelled'],
-    default: 'confirmed'
+    enum: ['pending', 'confirmed', 'cancelled'],
+    default: 'pending'
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'completed', 'failed'],
+    default: 'pending'
   }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('Booking', bookingSchema);
+export default mongoose.model('Booking', bookingSchema); 
