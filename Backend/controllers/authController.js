@@ -97,4 +97,19 @@ export const getMe = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
+};
+
+// @desc    Google OAuth callback
+// @route   GET /api/auth/google/callback
+// @access  Public
+export const googleCallback = async (req, res) => {
+  try {
+    const token = generateToken(req.user._id);
+    
+    // Redirect to frontend with token
+    res.redirect(`${process.env.FRONTEND_URL}/auth/google/callback?token=${token}`);
+  } catch (error) {
+    console.error(error);
+    res.redirect(`${process.env.FRONTEND_URL}/login?error=Authentication failed`);
+  }
 }; 
